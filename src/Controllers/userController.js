@@ -13,18 +13,17 @@ class UserController {
     // Hash the password
     const saltRounds = 10
     const hashedPassword = await bcrypt.hash(password, saltRounds)
-
     // Store the user in the database with the hashed password
-    const user = await this.userService.create({
+    const users = await this.userService.create({
       password: hashedPassword,
       ...rest,
     })
-    res.status(201).json(user)
+    res.status(201).json(users)
   }
 
   async getUserById(req, res) {
-    const user = await this.userService.findById(req.params.id)
-    res.json(user)
+    const users = await this.userService.findById(req.params.id)
+    res.json(users)
   }
 
   async getAllUsers(req, res) {
@@ -33,13 +32,13 @@ class UserController {
   }
 
   async updateUserById(req, res) {
-    const user = await this.userService.updateById(req.params.id, req.body)
-    res.json(user)
+    const users = await this.userService.updateById(req.params.id, req.body)
+    res.json(users)
   }
 
   async deleteUserById(req, res) {
-    const user = await this.userService.deleteById(req.params.id)
-    res.json(user)
+    const users = await this.userService.deleteById(req.params.id)
+    res.json(users)
   }
 
   
