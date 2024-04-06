@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 3000;
 const db_connect = require('./src/DataBase/index');
 const authRoutes = require('./src/Routes/authRoutes');
 const ProductRoutes = require('./src/Routes/productRoutes');
+const { notFound, errorHandler } = require('./src/Middleware/errorHandler');
 
 const app = express();
 app.use(cors());
@@ -21,6 +22,9 @@ db_connect().then(() => {
   
   app.use('/api/v1/User', authRoutes);
   app.use('/api/v1/products',ProductRoutes);
+
+  app.use(notFound);
+  app.use(errorHandler);
   app.listen(PORT, () => {
     console.log(`Example app listening on port ${PORT}`);
   });
