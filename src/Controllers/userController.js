@@ -1,47 +1,21 @@
-const bcrypt = require('bcrypt')
-const UserService = require('../services/userServices')
-const csvParser = require('csv-parser')
+const User = require("../Models/userModal");
 
-class UserController {
-  constructor() {
-    this.userService = new UserService()
-  }
+const createUser = async (req, res) => {
+    try {
+        const { firstname, lastname, email, password } = req.body;
 
-  async createUser(req, res) {
-    const { password, ...rest } = req.body
+        // Check if required fields are provided
+        if (!firstname || !lastname || !email || !password) {
+            return res.status(400).json({ error: "Please provide all required fields: first name, last name, email, and password" });
+        }
 
-    // Hash the password
-    const saltRounds = 10
-    const hashedPassword = await bcrypt.hash(password, saltRounds)
-    // Store the user in the database with the hashed password
-    const users = await this.userService.create({
-      password: hashedPassword,
-      ...rest,
-    })
-    res.status(201).json(users)
-  }
+        // Create a new user document
+        const newUser = await User.create({ firstname, lastname, email, password });
+        res.json(newUser);
+    } catch (error) {
+        console.error("Error creating user:", error);
+        res.status(500).json({ error: "An unexpected error occurred" });
+    }
+};
 
-  async getUserById(req, res) {
-    const users = await this.userService.findById(req.params.id)
-    res.json(users)
-  }
-
-  async getAllUsers(req, res) {
-    const users = await this.userService.findAll()
-    res.json(users)
-  }
-
-  async updateUserById(req, res) {
-    const users = await this.userService.updateById(req.params.id, req.body)
-    res.json(users)
-  }
-
-  async deleteUserById(req, res) {
-    const users = await this.userService.deleteById(req.params.id)
-    res.json(users)
-  }
-
-  
-}
-
-module.exports = UserController
+module.exports = { createUser };
