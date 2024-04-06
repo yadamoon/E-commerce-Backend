@@ -8,7 +8,6 @@ const createProduct = async (req, res) => {
         if (!name || !description || !price || !category || !image) {
             return res.status(400).json({ error: "Please provide all required fields: name, description, price, category, and image" });
         }
-
         // Create a new product document
         const newProduct = await Product.create({ name, description, price, category, image });
         res.json(newProduct);
