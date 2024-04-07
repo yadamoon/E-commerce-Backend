@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+const bcrpty = require('bcrypt');
 const userSchema = new mongoose.Schema(
   {
     firstname: {
@@ -34,6 +34,12 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 )
+
+const useSchema.pre("save", async function (next){
+  const salt =await bcrpty.genSaltSync(10);
+  this.password = await bcrpty.hash(this.password , salt);
+
+})
 
 const UserModel = mongoose.model('User', userSchema)
 
