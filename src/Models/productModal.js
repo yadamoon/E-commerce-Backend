@@ -21,12 +21,12 @@ const productModal = new mongoose.Schema({
     image: {
         type: String,
         required: [true, 'Please provide a image'],
-        unique:true
+        unique: true
     },
     // createdAt: 
-        // type: Date,
-        // default: Date.now
-    
+    // type: Date,
+    // default: Date.now
+
 });
 
 // Create a Product model based on the schema
