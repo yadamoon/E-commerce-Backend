@@ -8,20 +8,17 @@ const db_connect = require('./src/DataBase/index');
 const authRoutes = require('./src/Routes/authRoutes');
 const ProductRoutes = require('./src/Routes/productRoutes');
 const { notFound, errorHandler } = require('./src/Middleware/errorHandler');
-
 const app = express();
 app.use(cors());
-
 db_connect().then(() => {
   console.log('Connected to MongoDB');
-
   app.use(express.json());
   console.log({ __dirname });
   app.use(bodyParser.json()); // Parse JSON bodies
   app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
-  
+
   app.use('/api/v1/User', authRoutes);
-  app.use('/api/v1/products',ProductRoutes);
+  app.use('/api/v1/products', ProductRoutes);
 
   app.use(notFound);
   app.use(errorHandler);
