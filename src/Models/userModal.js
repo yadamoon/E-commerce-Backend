@@ -35,11 +35,11 @@ const userSchema = new mongoose.Schema(
   }
 )
 
-const useSchema.pre("save", async function (next){
+userSchema.pre("save", async function (next){
   const salt =await bcrpty.genSaltSync(10);
   this.password = await bcrpty.hash(this.password , salt);
 
-})
+});
 
 const UserModel = mongoose.model('User', userSchema)
 
