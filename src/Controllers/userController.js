@@ -44,6 +44,20 @@ const getAllUsers = asyncHandler(async (req, res) => {
     }
 })
 
+
+const updateUserById = asyncHandler(async (req,res)=>{
+    const { id } =req.params;
+    console.log(id)
+
+    const updateById = await User.findByIdAndUpdate(id,{
+        firstname:req?.body?.firstname,
+        lastname:req?.body?.lastname,
+        email:req?.body?.email,
+      
+    },{new:true})
+res.json(updateById)
+})
+
 const getUserById = asyncHandler(async (req, res) => {
     const { id } = req.params;
     try {
@@ -55,5 +69,16 @@ const getUserById = asyncHandler(async (req, res) => {
         throw new Error(error);
     }
 });
+const deleteUserById = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    try {
+        const deleteById = await User.findByIdAndDelete(id);
+        res.json(
+            deleteById
+        );
+    } catch (error) {
+        throw new Error(error);
+    }
+});
 
-module.exports = { createUser, loginCtrl, getAllUsers, getUserById };
+module.exports = { createUser, loginCtrl, getAllUsers, getUserById, deleteUserById , updateUserById };
