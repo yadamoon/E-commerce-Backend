@@ -26,7 +26,13 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ["admin", "user"],
         default: "user"
-    }
+    },
+    cart:{
+        type:String,
+        default:[]
+    },
+    address:[{type:mongoose.Schema.Types.ObjectId, ref:"Address"}],
+    product:[{type:mongoose.Schema.Types.ObjectId,ref:"product"}]
 }, {
     timestamps: true,
 });
