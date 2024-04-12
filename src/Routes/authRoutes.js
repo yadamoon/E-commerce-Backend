@@ -4,11 +4,11 @@ const {authMiddleware , isAdmin} = require("../Middleware/authMiddleware")
 const router = express.Router();
 
 router.post('/register', createUser);
-router.post('/login',  loginCtrl,isAdmin);
+router.post('/login',loginCtrl,isAdmin);
 router.get('/allUsers', getAllUsers);
-router.get('/:id', authMiddleware , getUserById)
+router.get('/:id', authMiddleware,isAdmin,getUserById)
 router.delete('/:id', deleteUserById);
-router.put('/:id',updateUserById)
+router.put('/:id',authMiddleware ,updateUserById)
 
 module.exports = router;
 

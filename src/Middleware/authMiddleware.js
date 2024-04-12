@@ -1,13 +1,13 @@
-const User =require("../Models/userModal");
+const User = require("../Models/userModal");
 const jwt = require("jsonwebtoken")
 const asyncHandler = require("express-async-handler")
 
 
 const authMiddleware = asyncHandler(async (req, res, next) => {
-    let token;
-    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
-        token = req.headers.authorization.split(" ")[1];
-        try {
+    try {
+        let token;
+        if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+            token = req.headers.authorization.split(" ")[1];
             if (token) {
                 const decoded = jwt.verify(token, process.env.JWT_SECRET);
                 if (decoded.id) {
@@ -15,6 +15,7 @@ const authMiddleware = asyncHandler(async (req, res, next) => {
                     if (user) {
                         req.user = user;
                         next();
+                        return; // Added to prevent multiple response sends
                     } else {
                         throw new Error("User not found");
                     }
@@ -24,11 +25,11 @@ const authMiddleware = asyncHandler(async (req, res, next) => {
             } else {
                 throw new Error("Token not provided");
             }
-        } catch (error) {
-            throw new Error("Not Authorized: Token expired or invalid");
+        } else {
+            throw new Error("Authorization header not provided or incorrect format");
         }
-    } else {
-        throw new Error("Authorization header not provided or incorrect format");
+    } catch (error) {
+        throw new Error("Not Authorized: Token expired or invalid");
     }
 });
 
@@ -46,4 +47,4 @@ const isAdmin = asyncHandler(async (req, res, next) => {
     }
 });
 
-module.exports = {authMiddleware , isAdmin};
+module.exports = { authMiddleware, isAdmin };
