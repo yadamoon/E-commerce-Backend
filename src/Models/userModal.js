@@ -28,11 +28,12 @@ const userSchema = new mongoose.Schema({
         default: "user"
     },
     cart:{
-        type:String,
-        default:[]
+        type: [String], // or specify the type of items in the array, e.g., [mongoose.Schema.Types.ObjectId]
+        default: [],
     },
+    
     address:[{type:mongoose.Schema.Types.ObjectId, ref:"Address"}],
-    product:[{type:mongoose.Schema.Types.ObjectId,ref:"product"}]
+    product:[{type:mongoose.Schema.Types.ObjectId, ref:"Product"}],
 }, {
     timestamps: true,
 });
