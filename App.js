@@ -8,6 +8,7 @@ const db_connect = require('./src/DataBase/index');
 const authRoutes = require('./src/Routes/authRoutes');
 const ProductRoutes = require('./src/Routes/productRoutes');
 const { notFound, errorHandler } = require('./src/Middleware/errorHandler');
+const cookieParser = require('cookie-parser');
 const app = express();
 app.use(cors());
 db_connect().then(() => {
@@ -16,7 +17,8 @@ db_connect().then(() => {
   console.log({ __dirname });
   app.use(bodyParser.json()); // Parse JSON bodies
   app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
-
+  app.use(cookieParser);
+  
   app.use('/api/v1/User', authRoutes);
   app.use('/api/v1/products', ProductRoutes);
 
