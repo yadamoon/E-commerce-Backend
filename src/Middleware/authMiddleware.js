@@ -1,7 +1,6 @@
 const User = require("../Models/userModal");
-const jwt = require("jsonwebtoken")
-const asyncHandler = require("express-async-handler")
-
+const jwt = require("jsonwebtoken");
+const asyncHandler = require("express-async-handler");
 
 const authMiddleware = asyncHandler(async (req, res, next) => {
     try {
@@ -17,33 +16,33 @@ const authMiddleware = asyncHandler(async (req, res, next) => {
                         next();
                         return; // Added to prevent multiple response sends
                     } else {
-                        throw new Error("User not found");
+                        res.status(404).json({ message: "User not found" });
                     }
                 } else {
-                    throw new Error("Invalid token");
+                    res.status(401).json({ message: "Invalid token" });
                 }
             } else {
-                throw new Error("Token not provided");
+                res.status(401).json({ message: "Token not provided" });
             }
         } else {
-            throw new Error("Authorization header not provided or incorrect format");
+            res.status(401).json({ message: "Authorization header not provided or incorrect format" });
         }
     } catch (error) {
-        throw new Error("Not Authorized: Token expired or invalid");
+        res.status(401).json({ message: "Not Authorized: Token expired or invalid", error: error.message });
     }
 });
-
 
 const isAdmin = asyncHandler(async (req, res, next) => {
     try {
         const { email } = req.user;
         const adminUser = await User.findOne({ email: email });
         if (!adminUser || adminUser.role !== "admin") {
-            throw new Error("You are not an admin");
+            res.status(403).json({ message: "You are not an admin" });
+        } else {
+            next();
         }
-        next();
     } catch (error) {
-        throw new Error(error.message);
+        res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 });
 

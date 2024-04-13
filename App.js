@@ -17,7 +17,7 @@ db_connect().then(() => {
   console.log({ __dirname });
   app.use(bodyParser.json()); // Parse JSON bodies
   app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
-  app.use(cookieParser);
+  app.use(cookieParser()); // Invoke cookieParser as a function
   
   app.use('/api/v1/User', authRoutes);
   app.use('/api/v1/products', ProductRoutes);
@@ -30,4 +30,3 @@ db_connect().then(() => {
 }).catch((error) => {
   console.error('Error connecting to MongoDB:', error);
 });
-
