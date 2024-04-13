@@ -1,7 +1,9 @@
 const User = require("../Models/userModal");
 const { generatToken } = require("../config/jwtToken")
 const asyncHandler = require("express-async-handler");
-const  validateMongoDbId  = require("../utils/validateMongoDbId");
+const validateMongoDbId = require("../utils/validateMongoDbId");
+const { generatRefreshToken } = require("../config/generateRefreshToken")
+
 
 
 // ? for created new User
@@ -26,6 +28,19 @@ const loginCtrl = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     const findUser = await User.findOne({ email });
     if (findUser && (await findUser.isPasswordMatched(password))) {
+        const refreshToken = await generatRefreshToken(findUser?.id);
+        const updatedUser = await User.findByIdAndUpdate(
+            findUser.id, {
+            refreshToken: refreshToken,
+        },
+            {
+                new: true
+            }
+        );
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            maxAge: 72 * 60 * 60 * 1000,
+        })
         res.json({
             _id: findUser?._id,
             firstname: findUser?.firstname,
@@ -48,7 +63,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
     } catch (error) {
         throw new Error(error)
     }
-})
+});
 // ? for Get User By Id
 const getUserById = asyncHandler(async (req, res) => {
     const { id } = req.params;
@@ -74,8 +89,7 @@ const updateUserById = asyncHandler(async (req, res) => {
         email: req?.body?.email,
     }, { new: true })
     res.json(updateById)
-})
-
+});
 
 // ? for Deleted User By Id
 const deleteUserById = asyncHandler(async (req, res) => {
@@ -91,7 +105,7 @@ const deleteUserById = asyncHandler(async (req, res) => {
         throw new Error(error);
     }
 });
-
+//? for block a user
 const blockUser = asyncHandler(async (req, res) => {
     const { id } = req.params;
     validateMongoDbId(id)
@@ -110,6 +124,9 @@ const blockUser = asyncHandler(async (req, res) => {
     }
 
 })
+
+
+//? for unBlock a user
 const unBlockUser = asyncHandler(async (req, res) => {
     const { id } = req.params;
     validateMongoDbId(id)
@@ -127,7 +144,9 @@ const unBlockUser = asyncHandler(async (req, res) => {
     } catch (error) {
         throw new Error(error)
     }
-})
+});
 
 
-module.exports = { createUser, loginCtrl, getAllUsers, getUserById, deleteUserById, updateUserById  , blockUser, unBlockUser};
+
+
+module.exports = { createUser, loginCtrl, getAllUsers, getUserById, deleteUserById, updateUserById, blockUser, unBlockUser };
