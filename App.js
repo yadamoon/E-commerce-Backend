@@ -6,7 +6,7 @@ const path = require('path');
 const PORT = process.env.PORT || 3000;
 const db_connect = require('./src/DataBase/index');
 const authRoutes = require('./src/features/customers/Routes/authRoutes');
-// const ProductRoutes = require('./src/features/Products/Routes/productRoutes');
+const productRoutes = require("./src/features/Products/Routes/productRoutes");
 const { notFound, errorHandler } = require('./src/Middleware/errorHandler');
 const cookieParser = require('cookie-parser');
 const { authMiddleware } = require("./src/Middleware/authMiddleware"); // Import authMiddleware
@@ -21,7 +21,7 @@ db_connect().then(() => {
   app.use(cookieParser()); // Invoke cookieParser as a function
 
   // Apply authMiddleware to routes where authentication is required
-  // app.use('/api/v1/products', authMiddleware, ProductRoutes);
+  app.use('/api/v1/products',authMiddleware, productRoutes);
 
   // Apply other routes
   app.use('/api/v1/user', authRoutes);
