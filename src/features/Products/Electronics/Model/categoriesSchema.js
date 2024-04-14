@@ -5,10 +5,7 @@ const categorySchema = new mongoose.Schema({
     type: String,
     required: [true , 'Please provide a  name']
   },
-  description: {
-    type: String,
-    required: [true , 'Please provide a  description']
-  },
+  
 });
 
 const Category = mongoose.model('Category', categorySchema);

@@ -5,11 +5,11 @@ const { boolean } = require('joi');
 const userSchema = new mongoose.Schema({
     firstname: {
         type: String,
-        required: [true, 'Please provide a first name'],
+        required: [true, 'Please provide a firstName'],
     },
     lastname: {
         type: String,
-        required: [true, 'Please provide a last name'],
+        required: [true, 'Please provide a lastName'],
     },
     email: {
         type: String,
@@ -39,12 +39,22 @@ const userSchema = new mongoose.Schema({
         default: [],
     },
 
-    address: [{ type: mongoose.Schema.Types.ObjectId, ref: "Address" }],
-    product: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
-    refreshToken:{type:String},
+    address: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Address"
+    }],
+    product: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product"
+    }],
+    refreshToken: {
+        type: String
+    },
 }, {
     timestamps: true,
 });
+
+// bcrypt the password
 userSchema.pre("save", async function (next) {
     const salt = await bcrypt.genSaltSync(10);
     this.password = await bcrypt.hash(this.password, salt);
