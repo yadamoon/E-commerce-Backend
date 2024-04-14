@@ -5,10 +5,11 @@ const cors = require('cors');
 const path = require('path');
 const PORT = process.env.PORT || 3000;
 const db_connect = require('./src/DataBase/index');
-const authRoutes = require('./src/Routes/authRoutes');
-const ProductRoutes = require('./src/Routes/productRoutes');
+const authRoutes = require('./src/features/customers/Routes/authRoutes');
+// const ProductRoutes = require('./src/features/Products/Routes/productRoutes');
 const { notFound, errorHandler } = require('./src/Middleware/errorHandler');
 const cookieParser = require('cookie-parser');
+const { authMiddleware } = require("./src/Middleware/authMiddleware"); // Import authMiddleware
 const app = express();
 app.use(cors());
 db_connect().then(() => {
@@ -18,12 +19,18 @@ db_connect().then(() => {
   app.use(bodyParser.json()); // Parse JSON bodies
   app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
   app.use(cookieParser()); // Invoke cookieParser as a function
-  
-  app.use('/api/v1/User', authRoutes);
-  app.use('/api/v1/products', ProductRoutes);
 
+  // Apply authMiddleware to routes where authentication is required
+  // app.use('/api/v1/products', authMiddleware, ProductRoutes);
+
+  // Apply other routes
+  app.use('/api/v1/user', authRoutes);
+
+  // Error handling middleware
   app.use(notFound);
   app.use(errorHandler);
+
+  // Start the server
   app.listen(PORT, () => {
     console.log(`Example app listening on port ${PORT}`);
   });

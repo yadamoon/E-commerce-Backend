@@ -1,4 +1,4 @@
-const User = require("../Models/userModal");
+const User = require("../features/customers/Models/userModal");
 const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
 
@@ -31,6 +31,9 @@ const authMiddleware = asyncHandler(async (req, res, next) => {
         res.status(401).json({ message: "Not Authorized: Token expired or invalid", error: error.message });
     }
 });
+
+
+
 
 const isAdmin = asyncHandler(async (req, res, next) => {
     try {
