@@ -23,10 +23,9 @@ const productModal = new mongoose.Schema({
         required: [true, 'Please provide a image'],
         unique: true
     },
-    // createdAt: 
-    // type: Date,
-    // default: Date.now
-
+},
+{
+    timestamps: true,
 });
 
 // Create a Product model based on the schema
