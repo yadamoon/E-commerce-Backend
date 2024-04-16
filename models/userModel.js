@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const { boolean } = require('joi');
+const { boolean } = require('../src/node_modules/joi/lib');
 
 const userSchema = new mongoose.Schema({
     firstname: {
@@ -54,16 +54,16 @@ const userSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-// bcrypt the password
-userSchema.pre("save", async function (next) {
-    const salt = await bcrypt.genSaltSync(10);
-    this.password = await bcrypt.hash(this.password, salt);
-});
+// // bcrypt the password
+// userSchema.pre("save", async function (next) {
+//     const salt = await bcrypt.genSaltSync(10);
+//     this.password = await bcrypt.hash(this.password, salt);
+// });
 
-// Define a method to compare passwords
-userSchema.methods.isPasswordMatched = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);
-};
+// // Define a method to compare passwords
+// userSchema.methods.isPasswordMatched = async function (enteredPassword) {
+//     return await bcrypt.compare(enteredPassword, this.password);
+// };
 
 const UserModel = mongoose.model('User', userSchema);
 

@@ -1,9 +1,11 @@
-const Product = require("../Model/eleProductModel");
+const Product = require("../models/eleProductModel");
 
 const createElectronicsProduct = async (req, res) => {
     console.log("hello")
     try {
-        const newProduct = await Product.create(req.body)
+        const newProduct = await Product.create(req.body);
+        res.json(newProduct)
+
     } 
     catch (error) {
         console.error("Error creating product:", error);

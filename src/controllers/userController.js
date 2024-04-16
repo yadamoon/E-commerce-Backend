@@ -9,7 +9,6 @@ class UserController {
   async createUser(req, res) {
    
     try{ 
-      
     const { password, ...rest } = req.body
 
     // Hash the password

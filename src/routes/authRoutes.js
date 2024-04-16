@@ -9,8 +9,8 @@ const { createUser,
     unBlockUser,
     handleRefreshToken,
     logOut
- } = require('../Controllers/userController');
-const { authMiddleware, isAdmin } = require("../../../Middleware/authMiddleware")
+ } = require('../controllers/userController');
+const { authMiddleware, isAdmin } = require("../middleware/authMiddleware")
 const router = express.Router();
 router.post('/register', createUser);
 router.post('/login', loginCtrl);
