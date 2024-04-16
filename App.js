@@ -4,11 +4,10 @@ require('dotenv').config();
 const cors = require('cors');
 const path = require('path');
 const PORT = process.env.PORT || 3000;
-const db_connect = require('./src/DataBase/index');
-const authRoutes = require('./src/features/customers/Routes/authRoutes'); 
-const { notFound, errorHandler } = require('./src/Middleware/errorHandler');
+const db_connect = require('./src/dataBase/index');
+const userRoutes = require('./src/routes/userRoutes')
+const { notFound, errorHandler } = require('./src/middleware/errorHandler');
 const cookieParser = require('cookie-parser');
-const eleProductRoutes = require("./src/features/Products/Electronics/Routes/eleProductRoutes")
 
 const app = express();
 app.use(cors());
@@ -20,11 +19,8 @@ db_connect().then(() => {
   app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
   app.use(cookieParser()); // Invoke cookieParser as a function
 
-  // Apply authMiddleware to routes where authentication is required
-  app.use('/api/v1/products', eleProductRoutes);
-
   // Apply other routes
-  app.use('/api/v1/user', authRoutes);
+  app.use('/api/v1/user', userRoutes);
 
   // Error handling middleware
   app.use(notFound);
