@@ -4,8 +4,11 @@ class AppServices {
     }
   
     async create(data) {
-      const doc = await this.model.create(data)
-      return doc.toObject()
+      try{
+        const doc = await this.model.create(data)
+        return doc.toObject()
+      }catch(e ){new Error(e)}
+     
     }
   
     async findById(id) {
