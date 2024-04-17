@@ -23,7 +23,7 @@ db_connect().then(() => {
   app.use('/api/v1/user', userRoutes);
   app.use('/api/v1/auth',authRoute);
 
-  // Error handling middleware
+  // Error handling    "email": "abel12345@gmail.com",   "email": "abel12345@gmail.com"   "email": "abel12345@gmail.com","email": "abel12345@gmail.com",,
   app.use(notFound);
   app.use(errorHandler);
 
