@@ -1,14 +1,12 @@
 const bcrypt = require('bcrypt')
-const UserService = require('../services/UserServices'); // Updated to match the import statement
+const UserService = require('../services/UserServices'); // Corrected file name
 const csvParser = require('csv-parser')
-
 class UserController {
   constructor() {
     this.userService = new UserService()
   }
+
   async createUser(req, res) {
-   
-    try{ 
     const { password, ...rest } = req.body
 
     // Hash the password
@@ -20,48 +18,26 @@ class UserController {
       password: hashedPassword,
       ...rest,
     })
-    res.status(201).json(user)   }catch(error){new Error(error)}
+    res.status(201).json(user)
   }
   async getUserById(req, res) {
-
-    try{ 
-      const user = await this.userService.findById(req.params.id)
-      res.json(user)
-    }catch(error){
-      new Error(error)
-    }
-   
+    const user = await this.userService.findById(req.params.id)
+    res.json(user)
   }
 
   async getAllUsers(req, res) {
-    try{ 
-      const users = await this.userService.findAll()
-      res.json(users)
-    }catch(error){new Error(error)}
-   
+    const users = await this.userService.findAll()
+    res.json(users)
   }
 
   async updateUserById(req, res) {
-    try {
-        const user = await this.userService.updateById(req.params.id, req.body);
-        res.json(user);
-    } catch (error) {
-        if (error.code === 11000 && error.keyValue.email === req.body.email) {
-            res.status(400).json({ error: 'Email is already in use' });
-        } else {
-            res.status(500).json({ error: 'An error occurred while updating user' });
-        }
-    }
-}
+    const user = await this.userService.updateById(req.params.id, req.body)
+    res.json(user)
+  }
 
   async deleteUserById(req, res) {
-    try{  
-     const user = await this.userService.deleteById(req.params.id)
-      res.json(user)
-    }catch(error){
-      new Error(error);
-    }
- 
+    const user = await this.userService.deleteById(req.params.id)
+    res.json(user)
   }
 
   

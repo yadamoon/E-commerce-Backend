@@ -8,7 +8,7 @@ const db_connect = require('./src/dataBase/index');
 const userRoutes = require('./src/routes/userRoutes')
 const { notFound, errorHandler } = require('./src/middleware/errorHandler');
 const cookieParser = require('cookie-parser');
-
+const authRoute = require('./src/routes/authRoutes')
 const app = express();
 app.use(cors());
 db_connect().then(() => {
@@ -21,6 +21,7 @@ db_connect().then(() => {
 
   // Apply other routes
   app.use('/api/v1/user', userRoutes);
+  app.use('/api/v1/auth',authRoute);
 
   // Error handling middleware
   app.use(notFound);
