@@ -6,9 +6,10 @@ const path = require('path');
 const PORT = process.env.PORT || 3000;
 const db_connect = require('./src/dataBase/index');
 const userRoutes = require('./src/routes/userRoutes')
-const { notFound, errorHandler } = require('./src/middleware/errorHandler');
+const { notFound, errorHandler  } = require('./src/middleware/errorHandler');
 const cookieParser = require('cookie-parser');
 const authRoute = require('./src/routes/authRoutes')
+const productRoute = require('./src/routes/productRoutes')
 const app = express();
 app.use(cors());
 db_connect().then(() => {
@@ -22,8 +23,9 @@ db_connect().then(() => {
   // Apply other routes
   app.use('/api/v1/user', userRoutes);
   app.use('/api/v1/auth',authRoute);
+  app.use('/api/v1/product',productRoute);
 
-  // Error handling    "email": "abel12345@gmail.com",   "email": "abel12345@gmail.com"   "email": "abel12345@gmail.com","email": "abel12345@gmail.com",,
+  // Error handling   
   app.use(notFound);
   app.use(errorHandler);
 

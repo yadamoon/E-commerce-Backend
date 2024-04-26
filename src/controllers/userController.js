@@ -6,20 +6,45 @@ class UserController {
     this.userService = new UserService()
   }
 
+  // async createUser(req, res) {
+  //   const { password, ...rest } = req.body
+
+  //   // Hash the password
+  //   const saltRounds = 10
+  //   const hashedPassword = await bcrypt.hash(password, saltRounds)
+
+  //   // Store the user in the database with the hashed password
+  //   const user = await this.userService.create({
+  //     password: hashedPassword,
+  //     ...rest,
+  //   })
+  //   res.status(201).json(user)
+  // }
   async createUser(req, res) {
-    const { password, ...rest } = req.body
+    const { password, ...rest } = req.body;
 
-    // Hash the password
-    const saltRounds = 10
-    const hashedPassword = await bcrypt.hash(password, saltRounds)
+    // Check if password is present in the request body
+    if (!password) {
+        return res.status(400).json({ error: 'Password is required' });
+    }
 
-    // Store the user in the database with the hashed password
-    const user = await this.userService.create({
-      password: hashedPassword,
-      ...rest,
-    })
-    res.status(201).json(user)
-  }
+    try {
+        // Hash the password
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        // Store the user in the database with the hashed password
+        const user = await this.userService.create({
+            password: hashedPassword,
+            ...rest,
+        });
+        res.status(201).json(user);
+    } catch (error) {
+        console.error("Error creating user:", error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
   async getUserById(req, res) {
     const user = await this.userService.findById(req.params.id)
     res.json(user)

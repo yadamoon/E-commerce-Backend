@@ -29,9 +29,9 @@ class AppServices {
       return docs
     }
   
-    async updateById(id, data) {
+    async updateById(_id, data) {
       const doc = await this.model
-        .findByIdAndUpdate(id, data, {
+        .findByIdAndUpdate(_id, data, {
           new: true,
           runValidators: true,
         })
@@ -42,14 +42,14 @@ class AppServices {
       return doc
     }
   
-    async deleteById(id) {
-      const doc = await this.model.findByIdAndDelete(id).lean()
+    async deleteById(_id) {
+      const doc = await this.model.findByIdAndDelete(_id).lean()
       if (!doc) {
         throw new Error('Document not found')
       }
       return doc
     }
-  
+
     async insertMany(data) {
       const docs = await this.model.insertMany(data)
       return docs.map((doc) => doc.toObject())
